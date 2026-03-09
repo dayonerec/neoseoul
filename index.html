@@ -116,49 +116,34 @@ section { padding: 96px 48px; border-bottom: 1px solid var(--line); }
 .ptab.active { color: var(--ink); border-bottom-color: var(--ink); }
 
 /* ALBUM GRID */
-/* ALBUM GRID */
 .album-grid {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
   gap: 20px;
-  align-items: stretch; /* 변경: start -> stretch로 카드가 동일한 높이를 가지도록 늘림 */
 }
-.album-card {
-  cursor: pointer; transition: transform 0.3s;
-  display: flex; flex-direction: column;
-  height: 100%; /* 추가: 카드가 그리드 셀의 전체 높이를 채우도록 설정 */
-}
+.album-card { cursor: pointer; transition: transform 0.3s; }
 .album-card:hover { transform: translateY(-4px); }
 .album-cover {
-  width: 100%; aspect-ratio: 1;
+  width: 100%;
+  padding-bottom: 100%;
+  position: relative;
   background: var(--bg2);
   border: 1px solid var(--line);
-  display: flex; align-items: center; justify-content: center;
-  margin-bottom: 0; /* 기존 10px에서 0으로 수정 */
   overflow: hidden;
-  flex-shrink: 0;
 }
-.album-cover img { width: 100%; height: 100%; object-fit: cover; }
-.album-title {
-  font-family: var(--sans); font-size: 12px; font-weight: 600;
-  margin-bottom: 4px;
-  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-}
-.album-credit {
-  display: none;
+.album-cover img {
+  position: absolute; top: 0; left: 0;
+  width: 100%; height: 100%;
+  object-fit: cover; object-position: center;
+  display: block;
 }
 
 /* SKELETON */
 @keyframes pulse { 0%,100%{opacity:.3} 50%{opacity:.7} }
 .skeleton-cover {
-  width: 100%; aspect-ratio: 1;
+  width: 100%; padding-bottom: 100%;
+  position: relative;
   background: var(--bg2); border: 1px solid var(--line);
-  margin-bottom: 10px;
-  animation: pulse 1.5s ease-in-out infinite;
-}
-.skeleton-line {
-  height: 11px; background: var(--bg2); border-radius: 2px;
-  margin-bottom: 6px;
   animation: pulse 1.5s ease-in-out infinite;
 }
 
@@ -198,8 +183,14 @@ section { padding: 96px 48px; border-bottom: 1px solid var(--line); }
   background: var(--bg);
   overflow: hidden;
   border-bottom: 1px solid var(--line);
+  position: relative;
 }
-.modal-cover img { width: 100%; height: 100%; object-fit: cover; }
+.modal-cover img,
+.modal-cover video {
+  position: absolute; top: 0; left: 0;
+  width: 100%; height: 100%;
+  object-fit: cover; display: block;
+}
 .modal-body { padding: 28px 32px 32px; }
 .modal-title {
   font-family: var(--sans); font-size: 22px; font-weight: 700;
@@ -223,7 +214,7 @@ section { padding: 96px 48px; border-bottom: 1px solid var(--line); }
 .td-files-label { font-size: 9px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--sub); margin-bottom: 10px; }
 .td-files { display: flex; flex-direction: column; gap: 5px; }
 .td-file { display: flex; align-items: baseline; gap: 8px; font-size: 11px; color: var(--sub2); line-height: 1.5; }
-.td-file::before { content: '→'; font-size: 10px; color: var(--ink); flex-shrink: 0; }
+.td-file::before { content: 'arr'; font-size: 10px; color: var(--ink); flex-shrink: 0; }
 .td-note { font-size: 11px; color: var(--sub); }
 
 /* CONTACT */
@@ -275,10 +266,7 @@ body.lang-ko [data-en] { display: none !important; }
   .nav-links { display: none; }
   .hero { grid-template-columns: 1fr; gap: 40px; padding: 120px 20px 64px; }
   section { padding: 64px 20px; }
-  
-  /* 변경: 3열(repeat(3, 1fr))에서 2열(repeat(2, 1fr))로 수정 */
-  .album-grid { grid-template-columns: repeat(2, 1fr); gap: 14px; } 
-  
+  .album-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
   .contact-grid { grid-template-columns: 1fr; gap: 48px; }
   .form-2col { grid-template-columns: 1fr; }
   footer { flex-direction: column; gap: 12px; text-align: center; padding: 28px 20px; }
@@ -309,26 +297,42 @@ body.lang-ko [data-en] { display: none !important; }
 <!-- HERO -->
 <div class="hero">
   <div class="hero-left">
-    <h1>Mix &amp;<br>Mastering<br>Studio</h1>
+    <h1>Mix &amp;<br><em>Mastering</em><br>Studio</h1>
     <p class="hero-desc" data-ko>국내외 아티스트를 위한 전문 믹싱 &amp; 마스터링 서비스.<br>당신의 음악이 모든 플랫폼에서 최고로 들리도록.</p>
     <p class="hero-desc" data-en>Professional mixing &amp; mastering for artists worldwide.<br>Your music, sounding its best on every platform.</p>
   </div>
- 
+  <div class="hero-stats">
+    <div class="stat-row">
+      <span class="stat-num">500+</span>
+      <span class="stat-label" data-ko>완성 트랙</span>
+      <span class="stat-label" data-en>Tracks</span>
+    </div>
+    <div class="stat-row">
+      <span class="stat-num">12+</span>
+      <span class="stat-label" data-ko>경력 연수</span>
+      <span class="stat-label" data-en>Years</span>
+    </div>
+    <div class="stat-row">
+      <span class="stat-num">40+</span>
+      <span class="stat-label" data-ko>국가</span>
+      <span class="stat-label" data-en>Countries</span>
+    </div>
+  </div>
 </div>
 
 <!-- PORTFOLIO -->
 <section id="portfolio">
   <div class="sec-header">
     <span class="sec-num">01</span>
-    <h2 class="sec-title" data-ko>포트폴리오</h2>
-    <h2 class="sec-title" data-en>Portfolio</h2>
+    <h2 class="sec-title" data-ko>포트폴<em>리오</em></h2>
+    <h2 class="sec-title" data-en>Port<em>folio</em></h2>
   </div>
   <div class="portfolio-tabs">
     <button class="ptab active" id="ptab-music" onclick="switchTab('music')">
       <span data-ko>음악</span><span data-en>Music</span>
     </button>
     <button class="ptab" id="ptab-commercial" onclick="switchTab('commercial')">
-      <span data-ko>상업 (방송·광고)</span><span data-en>Commercial (Broadcast · Ad)</span>
+      <span data-ko>상업 (방송 · 광고)</span><span data-en>Commercial (Broadcast · Ad)</span>
     </button>
   </div>
   <div id="tab-music">
@@ -343,8 +347,8 @@ body.lang-ko [data-en] { display: none !important; }
 <section id="pricing">
   <div class="sec-header">
     <span class="sec-num">02</span>
-    <h2 class="sec-title" data-ko>가격 &amp; 납품</h2>
-    <h2 class="sec-title" data-en>Pricing &amp;Deliverables</h2>
+    <h2 class="sec-title" data-ko>가격 &amp; <em>납품</em></h2>
+    <h2 class="sec-title" data-en>Pricing &amp; <em>Deliverables</em></h2>
   </div>
   <table class="price-table">
     <tr>
@@ -408,8 +412,8 @@ body.lang-ko [data-en] { display: none !important; }
   <div class="contact-grid">
     <div class="contact-info">
       <div class="sec-num" style="margin-bottom:20px">03</div>
-      <h2 data-ko>프로젝트<br>문의하기</em></h2>
-      <h2 data-en>Start a<br>Project</em></h2>
+      <h2 data-ko>프로젝트<br><em>문의하기</em></h2>
+      <h2 data-en>Start a<br><em>Project</em></h2>
       <p data-ko>어떤 장르든 환영합니다. 파일 전달 후 작업을 시작하며, 수정 및 피드백은 이메일 또는 카카오톡으로 진행됩니다.</p>
       <p data-en>All genres welcome. Work begins after file delivery. Revisions and feedback via email or KakaoTalk.</p>
       <div class="info-rows">
@@ -419,7 +423,7 @@ body.lang-ko [data-en] { display: none !important; }
         </div>
         <div class="info-row">
           <span class="info-key">KakaoTalk</span>
-          <span class="info-val">@youngjay93</span>
+          <span class="info-val">@neoseoulm</span>
         </div>
         <div class="info-row">
           <span class="info-key" data-ko>파일 전송</span>
@@ -429,8 +433,8 @@ body.lang-ko [data-en] { display: none !important; }
         <div class="info-row">
           <span class="info-key" data-ko>납기</span>
           <span class="info-key" data-en>Turnaround</span>
-          <span class="info-val" data-ko>5–12 영업일</span>
-          <span class="info-val" data-en>5–12 business days</span>
+          <span class="info-val" data-ko>3–7 영업일</span>
+          <span class="info-val" data-en>3–7 business days</span>
         </div>
       </div>
     </div>
@@ -460,7 +464,7 @@ body.lang-ko [data-en] { display: none !important; }
         <div class="fg">
           <label data-ko>장르</label>
           <label data-en>Genre</label>
-          <input type="text" id="fieldGenre" placeholder="K-Pop, Hip-Hop, R&B…">
+          <input type="text" id="fieldGenre" placeholder="K-Pop, Hip-Hop, R&B">
         </div>
         <div class="fg">
           <label data-ko>트랙 수</label>
@@ -471,7 +475,7 @@ body.lang-ko [data-en] { display: none !important; }
       <div class="fg">
         <label data-ko>메시지</label>
         <label data-en>Message</label>
-        <textarea rows="4" id="fieldMessage" placeholder="Reference tracks, deadline, notes…"></textarea>
+        <textarea rows="4" id="fieldMessage" placeholder="Reference tracks, deadline, notes..."></textarea>
       </div>
       <button class="btn-send" onclick="submitForm(this)" data-ko>보내기 →</button>
       <button class="btn-send" onclick="submitForm(this)" data-en>Send →</button>
@@ -482,13 +486,13 @@ body.lang-ko [data-en] { display: none !important; }
 <!-- FOOTER -->
 <footer>
   <a class="logo" href="#">Neoseoul Mixroom</a>
-  <p>© 2025 Neoseoul Mixroom</p>
+  <p>2025 Neoseoul Mixroom</p>
 </footer>
 
 <!-- MODAL -->
 <div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
   <div class="modal" id="modal">
-    <button class="modal-close" onclick="closeModalDirect()">✕</button>
+    <button class="modal-close" onclick="closeModalDirect()">X</button>
     <div class="modal-cover" id="modalCover"></div>
     <div class="modal-body">
       <div class="modal-title" id="modalTitle"></div>
@@ -498,31 +502,31 @@ body.lang-ko [data-en] { display: none !important; }
 </div>
 
 <script>
-// ── 언어 전환 ──
-const serviceOptions = {
+// LANG
+var serviceOptions = {
   ko: [
     { value:'mix',    text:'믹싱 — 70만원' },
     { value:'master', text:'마스터링 — 20만원' },
     { value:'both',   text:'믹싱 + 마스터링 — 80만원' },
-    { value:'tune',   text:'보컬튠 — 30만원' },
+    { value:'tune',   text:'보컬튠 — 30만원' }
   ],
   en: [
     { value:'mix',    text:'Mixing — $500' },
     { value:'master', text:'Mastering — $150' },
     { value:'both',   text:'Mix + Master — $600' },
-    { value:'tune',   text:'Vocal Tune — $250' },
-  ],
+    { value:'tune',   text:'Vocal Tune — $250' }
+  ]
 };
 
 function setLang(l) {
   document.body.className = 'lang-' + l;
   document.getElementById('btn-ko').classList.toggle('active', l === 'ko');
   document.getElementById('btn-en').classList.toggle('active', l === 'en');
-  const sel = document.getElementById('serviceSelect');
-  const idx = sel.selectedIndex;
+  var sel = document.getElementById('serviceSelect');
+  var idx = sel.selectedIndex;
   sel.innerHTML = '';
-  serviceOptions[l].forEach(o => {
-    const opt = document.createElement('option');
+  serviceOptions[l].forEach(function(o) {
+    var opt = document.createElement('option');
     opt.value = o.value;
     opt.textContent = o.text;
     sel.appendChild(opt);
@@ -530,7 +534,7 @@ function setLang(l) {
   sel.selectedIndex = idx;
 }
 
-// ── 탭 전환 ──
+// TABS
 function switchTab(tab) {
   document.getElementById('tab-music').style.display      = tab === 'music'      ? '' : 'none';
   document.getElementById('tab-commercial').style.display = tab === 'commercial' ? '' : 'none';
@@ -538,17 +542,16 @@ function switchTab(tab) {
   document.getElementById('ptab-commercial').classList.toggle('active', tab === 'commercial');
 }
 
-// ── 로딩 스켈레톤 ──
+// SKELETON
 function showSkeleton(gridEl) {
-  gridEl.innerHTML = Array(5).fill(0).map(() => `
-    <div class="album-card">
-      <div class="skeleton-cover"></div>
-      <div class="skeleton-line" style="width:80%"></div>
-      <div class="skeleton-line" style="width:50%"></div>
-    </div>`).join('');
+  var html = '';
+  for (var i = 0; i < 5; i++) {
+    html += '<div class="album-card"><div class="skeleton-cover"></div></div>';
+  }
+  gridEl.innerHTML = html;
 }
 
-// ── 카드 렌더링 ──
+// BUILD GRID
 function buildGrid(gridEl, items) {
   gridEl.innerHTML = '';
   if (!items.length) {
@@ -556,26 +559,22 @@ function buildGrid(gridEl, items) {
     return;
   }
   items.forEach(function(a) {
-    const card = document.createElement('div');
+    var card = document.createElement('div');
     card.className = 'album-card';
-    card.innerHTML =
-      '<div class="album-cover">' +
-        (a.thumbnail ? '<img src="' + a.thumbnail + '" alt="' + a.title + '">' : '') +
-      '</div>' +
-      '<div class="album-title">' + a.title + '</div>' +
-      '<div class="album-credit">' + (a.credit || '') + '</div>';
+    var imgHtml = a.thumbnail
+      ? '<img src="' + a.thumbnail + '" alt="' + a.title + '">'
+      : '';
+    card.innerHTML = '<div class="album-cover">' + imgHtml + '</div>';
     card.addEventListener('click', function() { openModal(a); });
     gridEl.appendChild(card);
   });
 }
 
-// ── 모달 ──
+// MODAL
 function openModal(a) {
-  const cover = document.getElementById('modalCover');
-  if (a.cover && a.coverType && a.coverType.startsWith('video/')) {
-    cover.innerHTML =
-      '<video src="' + a.cover + '" controls autoplay muted playsinline ' +
-      'style="width:100%;height:100%;object-fit:cover;display:block;"></video>';
+  var cover = document.getElementById('modalCover');
+  if (a.cover && a.coverType && a.coverType.indexOf('video') === 0) {
+    cover.innerHTML = '<video src="' + a.cover + '" controls autoplay muted playsinline style="position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;display:block;"></video>';
   } else if (a.cover) {
     cover.innerHTML = '<img src="' + a.cover + '" alt="' + a.title + '">';
   } else {
@@ -588,7 +587,7 @@ function openModal(a) {
 }
 
 function closeModalDirect() {
-  const video = document.querySelector('#modalCover video');
+  var video = document.querySelector('#modalCover video');
   if (video) video.pause();
   document.getElementById('modalOverlay').classList.remove('open');
   document.body.style.overflow = '';
@@ -602,46 +601,40 @@ document.addEventListener('keydown', function(e) {
   if (e.key === 'Escape') closeModalDirect();
 });
 
-// ── Airtable ──
-const AIRTABLE_BASE_ID = 'apphcvmlySPThF1EM';
-const AIRTABLE_TABLE   = 'portfolio';
-const AIRTABLE_TOKEN   = 'patjpuKTKJRbNmfq7.60bbecc1f984af0cd6b215bb01fc226402179243d37f68c796847e2c41b8e1de';
+// AIRTABLE
+var AIRTABLE_BASE_ID = 'apphcvmlySPThF1EM';
+var AIRTABLE_TABLE   = 'portfolio';
+var AIRTABLE_TOKEN   = 'patjpuKTKJRbNmfq7.60bbecc1f984af0cd6b215bb01fc226402179243d37f68c796847e2c41b8e1de';
 
 async function loadPortfolio() {
-  const gridMusic      = document.getElementById('gridMusic');
-  const gridCommercial = document.getElementById('gridCommercial');
+  var gridMusic      = document.getElementById('gridMusic');
+  var gridCommercial = document.getElementById('gridCommercial');
   showSkeleton(gridMusic);
   showSkeleton(gridCommercial);
 
   try {
-    const url = 'https://api.airtable.com/v0/' + AIRTABLE_BASE_ID + '/' + encodeURIComponent(AIRTABLE_TABLE);
-    const res = await fetch(url, {
+    var url = 'https://api.airtable.com/v0/' + AIRTABLE_BASE_ID + '/' + encodeURIComponent(AIRTABLE_TABLE);
+    var res = await fetch(url, {
       headers: { 'Authorization': 'Bearer ' + AIRTABLE_TOKEN }
     });
     if (!res.ok) throw new Error('Airtable ' + res.status);
 
-    const data = await res.json();
-    const items = (data.records || []).map(function(r) {
+    var data = await res.json();
+    var items = (data.records || []).map(function(r) {
       return {
         title:     r.fields.title    || '',
         credit:    r.fields.credit   || '',
         category:  r.fields.category || 'music',
-        thumbnail: (r.fields.thumbnail && r.fields.thumbnail[0])
-                    ? r.fields.thumbnail[0].url
-                    : null,
-        cover:     (r.fields.cover && r.fields.cover[0])
-                    ? r.fields.cover[0].url
-                    : null,
-        coverType: (r.fields.cover && r.fields.cover[0])
-                    ? r.fields.cover[0].type
-                    : null,
+        thumbnail: (r.fields.thumbnail && r.fields.thumbnail[0]) ? r.fields.thumbnail[0].url : null,
+        cover:     (r.fields.cover     && r.fields.cover[0])     ? r.fields.cover[0].url     : null,
+        coverType: (r.fields.cover     && r.fields.cover[0])     ? r.fields.cover[0].type    : null
       };
     });
 
     buildGrid(gridMusic,      items.filter(function(i) { return i.category === 'music'; }));
     buildGrid(gridCommercial, items.filter(function(i) { return i.category === 'commercial'; }));
 
-  } catch (err) {
+  } catch(err) {
     console.error('Airtable 오류:', err.message);
     buildGrid(document.getElementById('gridMusic'),      []);
     buildGrid(document.getElementById('gridCommercial'), []);
@@ -650,14 +643,14 @@ async function loadPortfolio() {
 
 loadPortfolio();
 
-// ── 문의 폼 ──
+// FORM
 async function submitForm(btn) {
-  const name    = document.getElementById('fieldName').value.trim();
-  const email   = document.getElementById('fieldEmail').value.trim();
-  const service = document.getElementById('serviceSelect').value;
-  const genre   = document.getElementById('fieldGenre').value.trim();
-  const tracks  = document.getElementById('fieldTracks').value.trim();
-  const message = document.getElementById('fieldMessage').value.trim();
+  var name    = document.getElementById('fieldName').value.trim();
+  var email   = document.getElementById('fieldEmail').value.trim();
+  var service = document.getElementById('serviceSelect').value;
+  var genre   = document.getElementById('fieldGenre').value.trim();
+  var tracks  = document.getElementById('fieldTracks').value.trim();
+  var message = document.getElementById('fieldMessage').value.trim();
 
   if (!name || !email) {
     alert(document.body.classList.contains('lang-ko') ? '이름과 이메일을 입력해주세요.' : 'Please enter your name and email.');
@@ -668,14 +661,14 @@ async function submitForm(btn) {
   btn.disabled = true;
 
   try {
-    const res = await fetch('https://formspree.io/f/mqeyedbn', {
+    var res = await fetch('https://formspree.io/f/mqeyedbn', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-      body: JSON.stringify({ name, email, service, genre, tracks, message }),
+      body: JSON.stringify({ name: name, email: email, service: service, genre: genre, tracks: tracks, message: message })
     });
 
     if (res.ok) {
-      btn.textContent = '✓ Sent';
+      btn.textContent = 'Sent';
       document.getElementById('fieldName').value    = '';
       document.getElementById('fieldEmail').value   = '';
       document.getElementById('fieldGenre').value   = '';
@@ -688,7 +681,7 @@ async function submitForm(btn) {
     btn.textContent = document.body.classList.contains('lang-ko') ? '오류 — 다시 시도' : 'Error — try again';
     btn.disabled = false;
     setTimeout(function() {
-      btn.textContent = document.body.classList.contains('lang-ko') ? '보내기 →' : 'Send →';
+      btn.textContent = document.body.classList.contains('lang-ko') ? '보내기' : 'Send';
     }, 3000);
   }
 }
