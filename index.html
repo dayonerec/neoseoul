@@ -121,8 +121,29 @@ section { padding: 96px 48px; border-bottom: 1px solid var(--line); }
   grid-template-columns: repeat(5, 1fr);
   gap: 20px;
 }
-.album-card { cursor: pointer; transition: transform 0.3s; }
+.album-card { cursor: pointer; transition: transform 0.3s; position: relative; }
 .album-card:hover { transform: translateY(-4px); }
+.album-card:hover .album-hover { opacity: 1; }
+.album-hover {
+  position: absolute; inset: 0;
+  background: rgba(0,0,0,0.72);
+  display: flex; flex-direction: column; justify-content: flex-end;
+  padding: 14px;
+  opacity: 0;
+  transition: opacity 0.25s;
+  pointer-events: none;
+  z-index: 2;
+}
+.album-hover-title {
+  font-family: var(--sans); font-size: 12px; font-weight: 600;
+  color: var(--ink); margin-bottom: 5px;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.album-hover-credit {
+  font-size: 10px; color: var(--sub2); line-height: 1.5;
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
+  overflow: hidden;
+}
 .album-cover {
   width: 100%;
   padding-bottom: 100%;
@@ -214,7 +235,7 @@ section { padding: 96px 48px; border-bottom: 1px solid var(--line); }
 .td-files-label { font-size: 9px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--sub); margin-bottom: 10px; }
 .td-files { display: flex; flex-direction: column; gap: 5px; }
 .td-file { display: flex; align-items: baseline; gap: 8px; font-size: 11px; color: var(--sub2); line-height: 1.5; }
-.td-file::before { content: 'arr'; font-size: 10px; color: var(--ink); flex-shrink: 0; }
+.td-file::before { content: ''; display: none; }
 .td-note { font-size: 11px; color: var(--sub); }
 
 /* CONTACT */
@@ -423,7 +444,7 @@ body.lang-ko [data-en] { display: none !important; }
         </div>
         <div class="info-row">
           <span class="info-key">KakaoTalk</span>
-          <span class="info-val">@neoseoulm</span>
+          <span class="info-val">@youngjay93</span>
         </div>
         <div class="info-row">
           <span class="info-key" data-ko>파일 전송</span>
@@ -564,7 +585,13 @@ function buildGrid(gridEl, items) {
     var imgHtml = a.thumbnail
       ? '<img src="' + a.thumbnail + '" alt="' + a.title + '">'
       : '';
-    card.innerHTML = '<div class="album-cover">' + imgHtml + '</div>';
+    card.innerHTML =
+      '<div class="album-cover">' + imgHtml +
+        '<div class="album-hover">' +
+          '<div class="album-hover-title">' + a.title + '</div>' +
+          '<div class="album-hover-credit">' + (a.credit || '') + '</div>' +
+        '</div>' +
+      '</div>';
     card.addEventListener('click', function() { openModal(a); });
     gridEl.appendChild(card);
   });
@@ -678,7 +705,7 @@ async function submitForm(btn) {
       throw new Error('failed');
     }
   } catch(e) {
-    btn.textContent = document.body.classList.contains('lang-ko') ? '오류 — 다시 시도' : 'Error — try again';
+    btn.textContent = document.body.classList.contains('lang-ko') ? '오류 - 다시 시도' : 'Error - try again';
     btn.disabled = false;
     setTimeout(function() {
       btn.textContent = document.body.classList.contains('lang-ko') ? '보내기' : 'Send';
